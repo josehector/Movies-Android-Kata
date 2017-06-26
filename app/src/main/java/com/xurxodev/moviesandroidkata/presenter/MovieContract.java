@@ -1,4 +1,4 @@
-package com.xurxodev.moviesandroidkata.Presenter;
+package com.xurxodev.moviesandroidkata.presenter;
 
 import com.xurxodev.moviesandroidkata.model.Movie;
 

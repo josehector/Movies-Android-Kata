@@ -1,7 +1,5 @@
 package com.xurxodev.moviesandroidkata.view.fragment;
 
-import static com.xurxodev.moviesandroidkata.R.raw.movies;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,14 +12,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.xurxodev.moviesandroidkata.MoviesApp;
-import com.xurxodev.moviesandroidkata.Presenter.MovieContract;
-import com.xurxodev.moviesandroidkata.Presenter.MoviePresenter;
+import com.xurxodev.moviesandroidkata.presenter.MovieContract;
+import com.xurxodev.moviesandroidkata.presenter.MoviePresenter;
 import com.xurxodev.moviesandroidkata.R;
-import com.xurxodev.moviesandroidkata.data.DiskMovieRepository;
 import com.xurxodev.moviesandroidkata.model.Movie;
-import com.xurxodev.moviesandroidkata.view.activity.MoviesActivity;
 import com.xurxodev.moviesandroidkata.view.adapter.MoviesAdapter;
-import com.xurxodev.moviesandroidkata.view.boundary.MovieRepository;
 
 import java.util.List;
 

@@ -5,13 +5,10 @@ import android.app.Application;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.xurxodev.moviesandroidkata.Presenter.MovieContract;
-import com.xurxodev.moviesandroidkata.Presenter.MoviePresenter;
+import com.xurxodev.moviesandroidkata.presenter.MovieContract;
+import com.xurxodev.moviesandroidkata.presenter.MoviePresenter;
 import com.xurxodev.moviesandroidkata.data.DiskMovieRepository;
-import com.xurxodev.moviesandroidkata.model.Movie;
 import com.xurxodev.moviesandroidkata.view.boundary.MovieRepository;
-
-import java.util.List;
 
 import javax.inject.Singleton;
 
