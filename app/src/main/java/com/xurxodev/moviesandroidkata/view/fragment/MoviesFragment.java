@@ -13,22 +13,35 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.xurxodev.moviesandroidkata.MoviesApp;
+import com.xurxodev.moviesandroidkata.Presenter.MovieContract;
+import com.xurxodev.moviesandroidkata.Presenter.MoviePresenter;
 import com.xurxodev.moviesandroidkata.R;
 import com.xurxodev.moviesandroidkata.data.DiskMovieRepository;
 import com.xurxodev.moviesandroidkata.model.Movie;
+import com.xurxodev.moviesandroidkata.view.activity.MoviesActivity;
 import com.xurxodev.moviesandroidkata.view.adapter.MoviesAdapter;
+import com.xurxodev.moviesandroidkata.view.boundary.MovieRepository;
 
 import java.util.List;
 
-public class MoviesFragment extends Fragment {
+import javax.inject.Inject;
 
-    private DiskMovieRepository movieRepository;
+public class MoviesFragment extends Fragment implements MovieContract.View {
+
+    @Inject
+    MoviePresenter moviePresenter;
     private MoviesAdapter adapter;
     private RecyclerView recyclerView;
     private View rootView;
     private TextView moviesCountTextView;
     private ImageButton refreshButton;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initializeDagger();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,6 +56,10 @@ public class MoviesFragment extends Fragment {
         loadMovies();
 
         return rootView;
+    }
+
+    private void initializeDagger() {
+        ((MoviesApp)getActivity().getApplication()).getMoviesComponent().inject(this);
     }
 
     private void initializeTitle() {
@@ -72,14 +89,15 @@ public class MoviesFragment extends Fragment {
     }
 
     private void loadMovies() {
-        loadingMovies();
+        //loadingMovies();
+        showLoading();
 
         AsyncTask<Void,Void,List<Movie>> moviesAsyncTask = new AsyncTask<Void, Void, List<Movie>>() {
             @Override
             protected List<Movie> doInBackground(Void... params) {
-                movieRepository = new DiskMovieRepository(getActivity().getApplication());
 
-                return movieRepository.getMovies();
+                //return movieRepository.getMovies();
+                return moviePresenter.getMovies();
             }
 
             @Override
@@ -105,5 +123,20 @@ public class MoviesFragment extends Fragment {
         String countText = getString(R.string.movies_count_text);
 
         moviesCountTextView.setText(String.format(countText, movies.size()));
+    }
+
+    @Override
+    public void showLoading() {
+        loadingMovies();
+    }
+
+    @Override
+    public void hiddenLoading() {
+        //// FIXME: eliminar??
+    }
+
+    @Override
+    public void showMovies(List<Movie> listMovies) {
+        loadedMovies(listMovies);
     }
 }

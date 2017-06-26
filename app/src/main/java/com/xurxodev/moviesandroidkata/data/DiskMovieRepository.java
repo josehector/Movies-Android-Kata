@@ -6,6 +6,7 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.xurxodev.moviesandroidkata.R;
 import com.xurxodev.moviesandroidkata.model.Movie;
+import com.xurxodev.moviesandroidkata.view.boundary.MovieRepository;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,11 +14,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class DiskMovieRepository {
+import javax.inject.Inject;
+
+public class DiskMovieRepository implements MovieRepository{
     private Context applicationContext;
 
-    public DiskMovieRepository(Application applicationContext){
+    private Gson gson;
+
+    public DiskMovieRepository(Application applicationContext, Gson gson){
         this.applicationContext = applicationContext;
+        this.gson = gson;
     }
 
     public List<Movie> getMovies() {
@@ -33,7 +39,6 @@ public class DiskMovieRepository {
             //TODO: fix io exception
         }
 
-        Gson gson = new Gson();
         Movie[] movies = gson.fromJson(jsonString, Movie[].class);
 
         simulateDelay();
