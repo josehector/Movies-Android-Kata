@@ -11,13 +11,13 @@ import java.util.List;
 public interface MovieContract {
 
     public interface Presenter {
-        List<Movie> getMovies();
+        //List<Movie> getMovies();
         void refresh();
+        void setView(View view);
     }
 
     public interface View {
         void showLoading();
-        void hiddenLoading();
         void showMovies(List<Movie> listMovies);
     }
 }

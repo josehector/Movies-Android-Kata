@@ -1,10 +1,12 @@
 package com.xurxodev.moviesandroidkata.presenter;
 
-import com.xurxodev.moviesandroidkata.presenter.MovieContract.Presenter;
+import com.xurxodev.moviesandroidkata.presenter.MovieContract.*;
 import com.xurxodev.moviesandroidkata.model.Movie;
 import com.xurxodev.moviesandroidkata.view.boundary.MovieRepository;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * Created by Usuario on 26/06/2017.
@@ -12,19 +14,23 @@ import java.util.List;
 
 public class MoviePresenter implements Presenter {
 
-    MovieRepository movieRepository;
+    private View view;
+    private MovieRepository movieRepository;
 
+    @Inject
     public MoviePresenter(MovieRepository movieRepository) {
         this.movieRepository = movieRepository;
     }
 
-    @Override
-    public List<Movie> getMovies() {
-        return movieRepository.getMovies();
-    }
 
     @Override
     public void refresh() {
-        //// FIXME: realmente el refresh es getMovies ????
+        view.showLoading();
+        view.showMovies(movieRepository.getMovies());
+    }
+
+    @Override
+    public void setView(View view) {
+        this.view = view;
     }
 }

@@ -36,6 +36,7 @@ public class MoviesFragment extends Fragment implements MovieContract.View {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initializeDagger();
+        moviePresenter.setView(this);
     }
 
     @Override
@@ -48,7 +49,8 @@ public class MoviesFragment extends Fragment implements MovieContract.View {
         initializeAdapter();
         initializeRecyclerView();
 
-        loadMovies();
+        //loadMovies();
+        moviePresenter.refresh();
 
         return rootView;
     }
@@ -69,7 +71,7 @@ public class MoviesFragment extends Fragment implements MovieContract.View {
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadMovies();
+                moviePresenter.refresh();
             }
         });
     }
@@ -92,7 +94,7 @@ public class MoviesFragment extends Fragment implements MovieContract.View {
             protected List<Movie> doInBackground(Void... params) {
 
                 //return movieRepository.getMovies();
-                return moviePresenter.getMovies();
+                return null;
             }
 
             @Override
@@ -125,10 +127,6 @@ public class MoviesFragment extends Fragment implements MovieContract.View {
         loadingMovies();
     }
 
-    @Override
-    public void hiddenLoading() {
-        //// FIXME: eliminar??
-    }
 
     @Override
     public void showMovies(List<Movie> listMovies) {
