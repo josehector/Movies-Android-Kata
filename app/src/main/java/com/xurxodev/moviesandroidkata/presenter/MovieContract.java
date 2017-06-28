@@ -11,7 +11,6 @@ import java.util.List;
 public interface MovieContract {
 
     public interface Presenter {
-        //List<Movie> getMovies();
         void refresh();
         void setView(View view);
     }
@@ -19,5 +18,8 @@ public interface MovieContract {
     public interface View {
         void showLoading();
         void showMovies(List<Movie> listMovies);
+        boolean isReady();
+        void showNumMovies(int num);
+        void clearMovies();
     }
 }

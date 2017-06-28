@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,8 @@ import javax.inject.Inject;
 
 public class MoviesFragment extends Fragment implements MovieContract.View {
 
+    private static final String TAG = MoviesFragment.class.getName();
+
     @Inject
     MoviePresenter moviePresenter;
     private MoviesAdapter adapter;
@@ -36,7 +39,6 @@ public class MoviesFragment extends Fragment implements MovieContract.View {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initializeDagger();
-        moviePresenter.setView(this);
     }
 
     @Override
@@ -44,12 +46,12 @@ public class MoviesFragment extends Fragment implements MovieContract.View {
             Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_movies, container, false);
 
+        moviePresenter.setView(this);
         initializeTitle();
         initializeRefreshButton();
         initializeAdapter();
         initializeRecyclerView();
 
-        //loadMovies();
         moviePresenter.refresh();
 
         return rootView;
@@ -71,6 +73,7 @@ public class MoviesFragment extends Fragment implements MovieContract.View {
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "onClick: ");
                 moviePresenter.refresh();
             }
         });
@@ -85,51 +88,32 @@ public class MoviesFragment extends Fragment implements MovieContract.View {
         recyclerView.setAdapter(adapter);
     }
 
-    private void loadMovies() {
-        //loadingMovies();
-        showLoading();
-
-        AsyncTask<Void,Void,List<Movie>> moviesAsyncTask = new AsyncTask<Void, Void, List<Movie>>() {
-            @Override
-            protected List<Movie> doInBackground(Void... params) {
-
-                //return movieRepository.getMovies();
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(List<Movie> movies) {
-                loadedMovies(movies);
-            }
-        };
-
-        moviesAsyncTask.execute();
-    }
-
-    private void loadingMovies(){
-        adapter.clearMovies();
+    @Override
+    public void showLoading() {
+        Log.d(TAG, "loadingMovies: loading...");
         moviesCountTextView.setText(R.string.loading_movies_text);
     }
 
-    private void loadedMovies(List<Movie> movies){
-        adapter.setMovies(movies);
-        refreshTitleWithMoviesCount(movies);
-    }
-
-    private void refreshTitleWithMoviesCount(List<Movie> movies) {
-        String countText = getString(R.string.movies_count_text);
-
-        moviesCountTextView.setText(String.format(countText, movies.size()));
-    }
-
-    @Override
-    public void showLoading() {
-        loadingMovies();
-    }
-
-
     @Override
     public void showMovies(List<Movie> listMovies) {
-        loadedMovies(listMovies);
+        Log.d(TAG, "loadedMovies: Show movies");
+        adapter.setMovies(listMovies);
     }
+
+    @Override
+    public boolean isReady() {
+        return isAdded();
+    }
+
+    @Override
+    public void showNumMovies(int num) {
+        String countText = getString(R.string.movies_count_text);
+        moviesCountTextView.setText(String.format(countText, num));
+    }
+
+    @Override
+    public void clearMovies() {
+        adapter.clearMovies();
+    }
+
 }
