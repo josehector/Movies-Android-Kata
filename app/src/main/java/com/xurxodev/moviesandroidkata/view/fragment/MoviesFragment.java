@@ -28,7 +28,7 @@ public class MoviesFragment extends Fragment implements MovieContract.View {
     private static final String TAG = MoviesFragment.class.getName();
 
     @Inject
-    MoviePresenter moviePresenter;
+    MovieContract.Presenter moviePresenter;
     private MoviesAdapter adapter;
     private RecyclerView recyclerView;
     private View rootView;

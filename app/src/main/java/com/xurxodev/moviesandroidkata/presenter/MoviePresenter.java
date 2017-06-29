@@ -19,7 +19,7 @@ public class MoviePresenter implements Presenter{
     private View view;
     private MovieRepository movieRepository;
 
-    @Inject
+    //@Inject
     public MoviePresenter(MovieRepository movieRepository) {
         this.movieRepository = movieRepository;
     }
