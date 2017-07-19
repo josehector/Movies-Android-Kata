@@ -5,6 +5,7 @@ import android.app.Application;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.xurxodev.moviesandroidkata.domain.usecase.GetMoviesUseCase;
 import com.xurxodev.moviesandroidkata.presenter.MovieContract;
 import com.xurxodev.moviesandroidkata.presenter.MoviePresenter;
 import com.xurxodev.moviesandroidkata.data.DiskMovieRepository;
@@ -37,9 +38,16 @@ public class MoviesModule {
     }
 
 
+
     @Provides
     @Singleton
-    public MovieContract.Presenter providesPresenter(MovieRepository movieRepository) {
-        return new MoviePresenter(movieRepository);
+    public GetMoviesUseCase providesGetMoviesUseCase(MovieRepository movieRepository) {
+        return new GetMoviesUseCase(movieRepository);
+    }
+
+    @Provides
+    @Singleton
+    public MovieContract.Presenter providesPresenter(GetMoviesUseCase getMoviesUseCase) {
+        return new MoviePresenter(getMoviesUseCase);
     }
 }

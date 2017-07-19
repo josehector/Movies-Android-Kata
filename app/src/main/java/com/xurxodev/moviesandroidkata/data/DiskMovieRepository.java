@@ -16,6 +16,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import rx.Observable;
+
 public class DiskMovieRepository implements MovieRepository{
     private Context applicationContext;
 
@@ -26,7 +28,7 @@ public class DiskMovieRepository implements MovieRepository{
         this.gson = gson;
     }
 
-    public List<Movie> getMovies() {
+    public Observable<List<Movie>> getMovies() {
         String jsonString = null;
 
         try {
@@ -43,7 +45,9 @@ public class DiskMovieRepository implements MovieRepository{
 
         simulateDelay();
 
-        return Arrays.asList(movies);
+        Observable<List<Movie>> observable = Observable.just(Arrays.asList(movies));
+
+        return observable;
     }
 
     private void simulateDelay(){
