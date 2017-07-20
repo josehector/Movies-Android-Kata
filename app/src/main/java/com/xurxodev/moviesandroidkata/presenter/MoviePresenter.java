@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.xurxodev.moviesandroidkata.domain.usecase.GetMoviesUseCase;
+import com.xurxodev.moviesandroidkata.domain.usecase.UseCase;
 import com.xurxodev.moviesandroidkata.presenter.MovieContract.*;
 import com.xurxodev.moviesandroidkata.model.Movie;
 import com.xurxodev.moviesandroidkata.view.boundary.MovieRepository;
@@ -18,6 +19,7 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 /**
  * Created by Usuario on 26/06/2017.
@@ -28,29 +30,26 @@ public class MoviePresenter implements Presenter{
     private static final String TAG = MoviePresenter.class.getName();
 
     private View view;
-    private GetMoviesUseCase getMoviesUseCase;
+    private UseCase<List<Movie>> getMoviesUseCase;
 
     @Inject
-    public MoviePresenter(GetMoviesUseCase getMoviesUseCase) {
+    public MoviePresenter(UseCase<List<Movie>> getMoviesUseCase) {
         this.getMoviesUseCase = getMoviesUseCase;
+        Timber.tag(TAG);
     }
 
     public void refresh() {
+        if (view.isReady()) {
+            view.showLoading();
+            view.clearMovies();
+            Timber.d("showLoading and clearMovies");
+        }
 
         getMoviesUseCase.execute()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(new Action1<List<Movie>>() {
-                    @Override
-                    public void call(List<Movie> movies) {
-                        if (view.isReady()) {
-                            view.showLoading();
-                            view.clearMovies();
-                            Log.d(TAG, "showLoading and clearMovies");
-                        }
-                    }
-                })
                 .subscribe(new Subscriber<List<Movie>>() {
+
                     @Override
                     public void onCompleted() {
 
@@ -58,7 +57,7 @@ public class MoviePresenter implements Presenter{
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Timber.e("onError: " + e);
                     }
 
                     @Override
@@ -66,7 +65,7 @@ public class MoviePresenter implements Presenter{
                         if (view.isReady()) {
                             view.showMovies(movies);
                             view.showNumMovies(movies.size());
-                            Log.d(TAG, "showMovies and showNumMovies");
+                            Timber.d("showMovies and showNumMovies");
                         }
 
                     }

@@ -30,14 +30,31 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
     compile 'com.squareup.picasso:picasso:2.5.2'
+
+    //Gson
     compile 'com.google.code.gson:gson:2.4'
 
+    //Dagger2
     compile "com.google.dagger:dagger:2.9"
     annotationProcessor "com.google.dagger:dagger-compiler:2.9"
     provided 'javax.annotation:jsr250-api:1.0'
 
+    //RxJava
     compile 'io.reactivex:rxjava:1.1.0'
-    compile 'io.reactivex:rxjava-async-util:0.21.0'
-
+    //compile 'io.reactivex:rxjava-async-util:0.21.0'
     compile 'io.reactivex:rxandroid:1.1.0'
+
+    //Timber (Log)
+    compile 'com.jakewharton.timber:timber:4.5.1'
+
+    //Retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
+    //compile 'com.squareup.retrofit2:retrofit:converter-gson:2.3.0'
+
+
+    //OkHttp
+    compile 'com.squareup.okhttp3:okhttp:3.2.0'
+    compile 'com.squareup.okio:okio:1.7.0'
 }

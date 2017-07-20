@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.inject.Inject;
-
+import retrofit2.Call;
 import rx.Observable;
+import rx.functions.Func0;
 
 public class DiskMovieRepository implements MovieRepository{
     private Context applicationContext;
@@ -27,6 +27,8 @@ public class DiskMovieRepository implements MovieRepository{
         this.applicationContext = applicationContext;
         this.gson = gson;
     }
+
+
 
     public Observable<List<Movie>> getMovies() {
         String jsonString = null;
@@ -41,20 +43,28 @@ public class DiskMovieRepository implements MovieRepository{
             //TODO: fix io exception
         }
 
-        Movie[] movies = gson.fromJson(jsonString, Movie[].class);
+        final Movie[] movies = gson.fromJson(jsonString, Movie[].class);
 
         simulateDelay();
 
-        Observable<List<Movie>> observable = Observable.just(Arrays.asList(movies));
+        Observable<List<Movie>> observable = Observable.defer(new Func0<Observable<List<Movie>>>() {
+            @Override
+            public Observable<List<Movie>> call() {
+                return Observable.just(Arrays.asList(movies));
+            }
+        });
+
+        //Observable<List<Movie>> observable = Observable.just(Arrays.asList(movies));
 
         return observable;
     }
 
     private void simulateDelay(){
         try {
-            Thread.sleep(4000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
+
 }

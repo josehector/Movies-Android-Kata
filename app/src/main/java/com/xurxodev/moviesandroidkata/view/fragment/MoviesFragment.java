@@ -1,11 +1,9 @@
 package com.xurxodev.moviesandroidkata.view.fragment;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +21,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import timber.log.Timber;
+
 public class MoviesFragment extends Fragment implements MovieContract.View {
 
     private static final String TAG = MoviesFragment.class.getName();
@@ -39,6 +39,7 @@ public class MoviesFragment extends Fragment implements MovieContract.View {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initializeDagger();
+        Timber.tag(TAG);
     }
 
     @Override
@@ -73,7 +74,7 @@ public class MoviesFragment extends Fragment implements MovieContract.View {
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: ");
+                Timber.d("onClick: ");
                 moviePresenter.refresh();
             }
         });
@@ -90,13 +91,13 @@ public class MoviesFragment extends Fragment implements MovieContract.View {
 
     @Override
     public void showLoading() {
-        Log.d(TAG, "loadingMovies: loading...");
+        Timber.d("loadingMovies: loading...");
         moviesCountTextView.setText(R.string.loading_movies_text);
     }
 
     @Override
     public void showMovies(List<Movie> listMovies) {
-        Log.d(TAG, "loadedMovies: Show movies");
+        Timber.d("loadedMovies: Show movies");
         adapter.setMovies(listMovies);
     }
 

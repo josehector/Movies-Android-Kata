@@ -15,6 +15,10 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.OkHttpClient;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Usuario on 26/06/2017.
@@ -33,8 +37,22 @@ public class MoviesModule {
 
     @Provides
     @Singleton
-    public MovieRepository providesDiskMovieRepository(Application application, Gson gson) {
-        return new DiskMovieRepository(application,gson);
+    OkHttpClient provideOkhttpClient() {
+        OkHttpClient.Builder client = new OkHttpClient.Builder();
+        return client.build();
+    }
+
+    @Provides
+    @Singleton
+    public MovieRepository providesDiskMovieRepository(Gson gson, OkHttpClient okHttpClient) {
+        //return new DiskMovieRepository(application,gson);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://www.mocky.io/v2/")
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(okHttpClient)
+                .build();
+        return retrofit.create(MovieRepository.class);
     }
 
 
